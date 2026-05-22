@@ -1,0 +1,9 @@
+{
+  "id": "slash-highlight",
+  "name": "Slash Highlight",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "description": "Resalta con fondo magenta cualquier palabra precedida por / en tus notas.",
+  "author": "Custom",
+  "isDesktopOnly": false
+}
