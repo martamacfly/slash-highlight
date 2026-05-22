@@ -1,14 +1,14 @@
 /*
  * Slash Highlight Plugin for Obsidian
- * - Símbolos disparadores configurables (/, @, etc.) con color de fondo propio
- * - Palabras clave configurables con color de texto propio
+ * - Configurable trigger symbols (/, @, etc.) with their own background color
+ * - Configurable keywords with their own text color
  */
 
 const { Plugin, PluginSettingTab, Setting } = require('obsidian');
 const { ViewPlugin, Decoration } = require('@codemirror/view');
 const { RangeSetBuilder } = require('@codemirror/state');
 
-// ─── Ajustes por defecto ───────────────────────────────────────────────────
+// ─── Default settings ─────────────────────────────────────────────────────
 const DEFAULT_SETTINGS = {
   triggers: [
     { symbol: '/',  bgColor: '#ff00ff', textColor: '#ffffff' },
@@ -30,15 +30,15 @@ function cssClass(str) {
 }
 
 const WORD_CHARS = '[\\w\\-\\.áéíóúüñÁÉÍÓÚÜÑ]+';
-// Lookbehind: el símbolo debe estar precedido por espacio, inicio de línea o inicio de string
+// Lookbehind: symbol must be preceded by a space, line start, or string start
 const LOOKBEHIND = '(?<=\\s|^)';
 
-// ─── Construye decoraciones para el editor ────────────────────────────────
+// ─── Build editor decorations ─────────────────────────────────────────────
 function buildDecorations(view, settings) {
   const builder = new RangeSetBuilder();
   const { triggers, keywords } = settings;
 
-  // Patrón combinado: símbolos disparadores + palabras clave
+  // Combined pattern: trigger symbols + keywords
   const triggerParts = triggers
     .filter(t => t.symbol)
     .map(t => `${LOOKBEHIND}${escapeRegex(t.symbol)}${WORD_CHARS}`);
@@ -61,14 +61,14 @@ function buildDecorations(view, settings) {
       const end = start + m[0].length;
       const matched = m[0];
 
-      // ¿Es un símbolo disparador?
+      // Is it a trigger symbol?
       const trigger = triggers.find(t => t.symbol && matched.startsWith(t.symbol));
       if (trigger) {
         builder.add(start, end, Decoration.mark({ class: `trigger-${cssClass(trigger.symbol)}` }));
         continue;
       }
 
-      // ¿Es una palabra clave?
+      // Is it a keyword?
       const kw = keywords.find(k => k.word.toLowerCase() === matched.toLowerCase());
       if (kw) {
         builder.add(start, end, Decoration.mark({ class: `kw-${cssClass(kw.word)}` }));
@@ -78,7 +78,7 @@ function buildDecorations(view, settings) {
   return builder.finish();
 }
 
-// ─── Plugin principal ──────────────────────────────────────────────────────
+// ─── Main plugin ──────────────────────────────────────────────────────────
 class SlashHighlightPlugin extends Plugin {
   async onload() {
     await this.loadSettings();
@@ -88,7 +88,7 @@ class SlashHighlightPlugin extends Plugin {
     document.head.appendChild(this.styleEl);
     this.refreshStyles();
 
-    // Extensión CodeMirror (editor en vivo)
+    // CodeMirror extension (live editor)
     const plugin = this;
     const editorExt = ViewPlugin.fromClass(
       class {
@@ -105,13 +105,13 @@ class SlashHighlightPlugin extends Plugin {
     );
     this.registerEditorExtension(editorExt);
 
-    // Post-procesador para Reading View
+    // Post-processor for Reading View
     this.registerMarkdownPostProcessor((el) => this.processReadingView(el));
 
-    // Panel de ajustes
+    // Settings panel
     this.addSettingTab(new SlashHighlightSettingTab(this.app, this));
 
-    console.log('Slash Highlight: cargado ✓');
+    console.log('Slash Highlight: loaded ✓');
   }
 
   onunload() {
@@ -120,7 +120,7 @@ class SlashHighlightPlugin extends Plugin {
 
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-    // Asegurar que existen ambas claves aunque los datos guardados sean viejos
+    // Ensure both keys exist even if saved data is from an older version
     if (!this.settings.triggers) this.settings.triggers = DEFAULT_SETTINGS.triggers;
     if (!this.settings.keywords) this.settings.keywords = DEFAULT_SETTINGS.keywords;
   }
@@ -223,7 +223,7 @@ class SlashHighlightPlugin extends Plugin {
   }
 }
 
-// ─── Panel de ajustes ─────────────────────────────────────────────────────
+// ─── Settings panel ───────────────────────────────────────────────────────
 class SlashHighlightSettingTab extends PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
@@ -234,11 +234,11 @@ class SlashHighlightSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    // ── Sección: Símbolos disparadores ──
-    containerEl.createEl('h2', { text: 'Slash Highlight — Ajustes' });
-    containerEl.createEl('h3', { text: '🔣 Símbolos disparadores' });
+    // ── Section: Trigger symbols ──
+    containerEl.createEl('h2', { text: 'Slash Highlight — Settings' });
+    containerEl.createEl('h3', { text: '🔣 Trigger symbols' });
     containerEl.createEl('p', {
-      text: 'La palabra que siga a estos símbolos recibirá el color de fondo configurado.',
+      text: 'The word following these symbols will receive the configured background color.',
       cls: 'setting-item-description'
     });
 
@@ -246,13 +246,13 @@ class SlashHighlightSettingTab extends PluginSettingTab {
 
     triggers.forEach((t, i) => {
       const setting = new Setting(containerEl)
-        .setName(`Símbolo: ${t.symbol || '(vacío)'}`)
+        .setName(`Symbol: ${t.symbol || '(empty)'}`)
         .addText(text => text
-          .setPlaceholder('símbolo (ej: / @ # !)')
+          .setPlaceholder('symbol (e.g. / @ # !)')
           .setValue(t.symbol)
           .onChange(async val => {
             triggers[i].symbol = val.trim().charAt(0) || '';
-            setting.setName(`Símbolo: ${triggers[i].symbol || '(vacío)'}`);
+            setting.setName(`Symbol: ${triggers[i].symbol || '(empty)'}`);
             await this.plugin.saveSettings();
           })
         )
@@ -272,7 +272,7 @@ class SlashHighlightSettingTab extends PluginSettingTab {
         )
         .addButton(btn => btn
           .setIcon('trash')
-          .setTooltip('Eliminar')
+          .setTooltip('Remove')
           .setClass('mod-warning')
           .onClick(async () => {
             triggers.splice(i, 1);
@@ -281,14 +281,14 @@ class SlashHighlightSettingTab extends PluginSettingTab {
           })
         );
 
-      // Etiquetas bajo los color pickers
+      // Labels below the color pickers
       const desc = setting.descEl;
-      desc.createSpan({ text: '🎨 fondo   🖊️ texto', cls: 'setting-item-description' });
+      desc.createSpan({ text: '🎨 background   🖊️ text', cls: 'setting-item-description' });
     });
 
     new Setting(containerEl)
       .addButton(btn => btn
-        .setButtonText('+ Añadir símbolo')
+        .setButtonText('+ Add symbol')
         .setCta()
         .onClick(async () => {
           triggers.push({ symbol: '', bgColor: '#ff00ff', textColor: '#ffffff' });
@@ -297,10 +297,10 @@ class SlashHighlightSettingTab extends PluginSettingTab {
         })
       );
 
-    // ── Sección: Palabras clave ──
-    containerEl.createEl('h3', { text: '🔤 Palabras clave' });
+    // ── Section: Keywords ──
+    containerEl.createEl('h3', { text: '🔤 Keywords' });
     containerEl.createEl('p', {
-      text: 'Estas palabras se colorearán en cualquier parte del texto (sin importar mayúsculas).',
+      text: 'These words will be colored anywhere in the text (case-insensitive).',
       cls: 'setting-item-description'
     });
 
@@ -308,9 +308,9 @@ class SlashHighlightSettingTab extends PluginSettingTab {
 
     keywords.forEach((kw, i) => {
       new Setting(containerEl)
-        .setName(kw.word || '(vacía)')
+        .setName(kw.word || '(empty)')
         .addText(text => text
-          .setPlaceholder('palabra')
+          .setPlaceholder('word')
           .setValue(kw.word)
           .onChange(async val => {
             keywords[i].word = val.trim();
@@ -326,7 +326,7 @@ class SlashHighlightSettingTab extends PluginSettingTab {
         )
         .addButton(btn => btn
           .setIcon('trash')
-          .setTooltip('Eliminar')
+          .setTooltip('Remove')
           .setClass('mod-warning')
           .onClick(async () => {
             keywords.splice(i, 1);
@@ -338,7 +338,7 @@ class SlashHighlightSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .addButton(btn => btn
-        .setButtonText('+ Añadir palabra clave')
+        .setButtonText('+ Add keyword')
         .setCta()
         .onClick(async () => {
           keywords.push({ word: '', color: '#f472b6' });
