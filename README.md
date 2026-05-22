@@ -1,6 +1,8 @@
 # Slash Highlight — Obsidian Plugin
 
-Resalta visualmente palabras en tus notas mediante dos mecanismos: **símbolos disparadores** (como `/` o `@`) y **palabras clave**. Todo configurable desde el panel de ajustes de Obsidian, sin tocar código.
+> **Español:** [Leer en español](README.es.md)
+
+Visually highlight words in your notes with two mechanisms: **trigger symbols** (such as `/` or `@`) and **keywords**. Everything is configurable from Obsidian’s settings panel—no code required.
 
 ![Obsidian](https://img.shields.io/badge/Obsidian-1.0%2B-7c3aed?logo=obsidian&logoColor=white)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
@@ -8,41 +10,41 @@ Resalta visualmente palabras en tus notas mediante dos mecanismos: **símbolos d
 
 ---
 
-## ¿Qué hace?
+## What it does
 
-### 🔣 Símbolos disparadores
-La palabra que siga a un símbolo configurado recibe un **color de fondo** y **color de texto** propios.
-
-```
-Ejecuta /comando en la terminal
-Menciona a @usuario en el hilo
-```
-
-> Solo se activa cuando el símbolo está precedido por un espacio o inicio de línea, por lo que las URLs (`https://ejemplo.com`) y los emails (`user@dominio.com`) **no se colorean**.
-
-### 🔤 Palabras clave
-Palabras concretas que se colorean en cualquier parte del texto con un **color de texto** personalizado, independientemente de las mayúsculas.
+### 🔣 Trigger symbols
+The word that follows a configured symbol gets its own **background** and **text** colors.
 
 ```
-Hoy usé claude para escribir esta nota en obsidian.
+Run /command in the terminal
+Mention @user in the thread
 ```
 
-Ambas funciones son compatibles y funcionan tanto en **Live Preview** como en **Reading View**.
+> Only activates when the symbol is preceded by a space or the start of a line, so URLs (`https://example.com`) and emails (`user@domain.com`) are **not** colored.
+
+### 🔤 Keywords
+Specific words colored anywhere in the text with a custom **text color**, case-insensitive.
+
+```
+Today I used claude to write this note in obsidian.
+```
+
+Both features work together in **Live Preview** and **Reading View**.
 
 ---
 
-## Instalación
+## Installation
 
-> Obsidian 1.0 o superior. No requiere dependencias externas.
+> Obsidian 1.0 or later. No external dependencies.
 
-**1. Activa los plugins de comunidad**
+**1. Enable community plugins**
 
-`Ajustes → Plugins de comunidad → Desactivar modo seguro`
+`Settings → Community plugins → Turn off restricted mode`
 
-**2. Copia la carpeta del plugin en tu vault**
+**2. Copy the plugin folder into your vault**
 
 ```
-TuVault/
+YourVault/
 └── .obsidian/
     └── plugins/
         └── slash-highlight/
@@ -50,72 +52,72 @@ TuVault/
             └── manifest.json
 ```
 
-> Si no ves la carpeta `.obsidian`, activa los archivos ocultos:
+> If you don’t see the `.obsidian` folder, show hidden files:
 > - **Mac:** `Cmd + Shift + .`
-> - **Windows:** `Ver → Mostrar archivos ocultos`
+> - **Windows:** `View → Show hidden files`
 
-**3. Actívalo en Obsidian**
+**3. Enable it in Obsidian**
 
-`Ajustes → Plugins de comunidad → Slash Highlight → activa el interruptor`
-
----
-
-## Configuración
-
-Accede al panel en `Ajustes → Slash Highlight`.
-
-### Sección: Símbolos disparadores
-
-Cada símbolo tiene tres controles:
-
-| Campo | Descripción |
-|---|---|
-| **Símbolo** | El carácter disparador (un solo carácter: `/`, `@`, `#`, `!`…) |
-| **Color de fondo** | Color del fondo de la palabra resaltada |
-| **Color de texto** | Color del texto encima del fondo |
-
-Por defecto incluye:
-- `/` → fondo magenta, texto blanco
-- `@` → fondo naranja, texto blanco
-
-### Sección: Palabras clave
-
-Cada entrada tiene dos controles:
-
-| Campo | Descripción |
-|---|---|
-| **Palabra** | El texto a detectar (sin distinguir mayúsculas) |
-| **Color** | Color del texto |
-
-Por defecto incluye: `claude`, `obsidian`, `nota`.
-
-**Los cambios se aplican al instante**, sin necesidad de reiniciar.
+`Settings → Community plugins → Slash Highlight → toggle on`
 
 ---
 
-## Ejemplos de uso
+## Configuration
+
+Open the panel at `Settings → Slash Highlight`.
+
+### Section: Trigger symbols
+
+Each symbol has three controls:
+
+| Field | Description |
+|---|---|
+| **Symbol** | The trigger character (single character: `/`, `@`, `#`, `!`, …) |
+| **Background color** | Background color of the highlighted word |
+| **Text color** | Text color on top of the background |
+
+Defaults:
+- `/` → magenta background, white text
+- `@` → orange background, white text
+
+### Section: Keywords
+
+Each entry has two controls:
+
+| Field | Description |
+|---|---|
+| **Word** | Text to match (case-insensitive) |
+| **Color** | Text color |
+
+Defaults: `claude`, `obsidian`, `nota`.
+
+**Changes apply instantly**—no restart needed.
+
+---
+
+## Usage examples
 
 ```markdown
-## Reunión del lunes
+## Monday meeting
 
-Hablar con @juan sobre el proyecto /alpha.
-Revisar la nota de claude sobre la arquitectura.
-Subir los cambios a /produccion antes del viernes.
+Talk to @juan about the /alpha project.
+Review claude’s note on the architecture.
+Push changes to /production before Friday.
 ```
 
-- `@juan` → fondo naranja
-- `/alpha` y `/produccion` → fondo magenta
-- `claude` → texto violeta
-- `nota` → texto naranja
+- `@juan` → orange background
+- `/alpha` and `/production` → magenta background
+- `claude` → violet text
+- `nota` → orange text
 
 ---
 
-## Actualizar
+## Updating
 
-Reemplaza el archivo `main.js` dentro de `.obsidian/plugins/slash-highlight/` con la nueva versión y pulsa **Recargar plugins** en el panel de plugins de comunidad. Tu configuración se conserva.
+Replace `main.js` inside `.obsidian/plugins/slash-highlight/` with the new version and click **Reload plugins** in the community plugins panel. Your settings are preserved.
 
 ---
 
-## Licencia
+## License
 
-MIT — libre para usar, modificar y distribuir.
+MIT — free to use, modify, and distribute.
