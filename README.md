@@ -1,5 +1,7 @@
 # Slash Highlight — Obsidian Plugin
 
+![Slash Highlight](assets/banner.jpg)
+
 > **Español:** [Leer en español](README.es.md)
 
 Visually highlight words in your notes with two mechanisms: **trigger symbols** (such as `/` or `@`) and **keywords**. Everything is configurable from Obsidian’s settings panel—no code required.

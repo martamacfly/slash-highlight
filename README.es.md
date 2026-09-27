@@ -1,5 +1,7 @@
 # Slash Highlight — Plugin de Obsidian
 
+![Slash Highlight](assets/banner.jpg)
+
 > **English:** [Read in English](README.md)
 
 Resalta visualmente palabras en tus notas mediante dos mecanismos: **símbolos disparadores** (como `/` o `@`) y **palabras clave**. Todo configurable desde el panel de ajustes de Obsidian, sin tocar código.
